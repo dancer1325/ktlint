@@ -1,5 +1,5 @@
-!!! note "Command Line usage"
-    If you don't plan to use `ktlint`'s command line interface then you can skip this section.
+* goal
+  * `ktlint`'s CL interface
 
 ## Download and verification
 
@@ -38,49 +38,49 @@ curl -sS https://keybase.io/shyiko/pgp_keys.asc | gpg --import && gpg --verify k
 
 `ktlint` can be installed via several OS specific package managers.
 
-Install with [brew on macOS](https://brew.sh/) or [Homebrew on Linux](https://docs.brew.sh/Homebrew-on-Linux)
-```sh
-brew install ktlint
-```
+* brew
+  * install 
+    * [brew | macOS](https://brew.sh/) OR
+    * [Homebrew | Linux](https://docs.brew.sh/Homebrew-on-Linux)
+  * `brew install ktlint`
 
-Install with [MacPorts](https://www.macports.org/)
-```sh
-port install ktlint
-```
+* [MacPorts](https://www.macports.org/)
+  * install it
+  * `port install ktlint`
 
-## Command line usage
+## how to use CL?
 
 ### Rule set(s)
 
-When no arguments are specified, the style of all Kotlin files (ending with '.kt' or '.kts') inside the current dir (recursively) are validated with the rules from the [standard ruleset](../../rules/standard/). Hidden folders will be skipped.
+* [standard ruleset](../rules/standard.md)
+  * == rules / 👀apply | ALL CURRENT directory (recursively)'s Kotlin files ('*.kt' OR '*.kts') 👀/
+    * ⚠️skip hidden folders⚠️
+  * use cases
+    * `ktlint`
+      * == ❌NO specify arguments❌
+      * == default validation / standard ruleset 
+  * if you want to run the experimental rules -> set ".editorconfig"'s `ktlint_experimental = enabled`
 
-```shell title="Default validation with standard ruleset"
-ktlint
-```
+* if you want to validate with a [custom ruleset](../api/custom-rule-set.md) ->
 
-!!! note
-    The experimental rules in the standard rule set will only be run when `.editorconfig` property `ktlint_experimental = enabled` is set.
-
-To validate with a [custom ruleset](../../api/custom-rule-set/) run command below:  
-
-```shell title="Validation with standard and a custom ruleset"
-ktlint --ruleset=/path/to/custom-ruleset.jar
-# or
-ktlint -R /path/to/custom-ruleset.jar
-```
-
-!!! note
-    If the custom rule set contains rules that are marked as experimental, those rule will only be run when `.editorconfig` property `ktlint_experimental = enabled` is set.
+    ```shell title="Validation with standard + custom ruleset"
+    ktlint --ruleset=/path/to/custom-ruleset.jar
+    # or
+    ktlint -R /path/to/custom-ruleset.jar
+    ```
+  * if it contains experimental rules & you want to run -> set ".editorconfig"'s `ktlint_experimental = enabled`
 
 ### Format (autocorrect)
-
-Most style violations can be corrected automatically. Errors that can not be corrected, are printed to `stderr`.
 
 ```shell title="Autocorrect style violations"
 ktlint --format
 # or
 ktlint -F
 ```
+
+* if 
+  * errors are NOT corrected -> printed | `stderr`
+  * there are style violations -> AUTOMATICALLY corrected
 
 ### Globs
 
@@ -123,57 +123,67 @@ ktlint --baseline=ktlint-baseline.xml # Baseline is created when not existing
 
 ### Logging
 
-Logging information is written to `stdout`. The amount of logging can be influenced by setting the minimal log level using option `--log-level` or `-l` to one of values `trace`, `debug`, `info`, `warn`, `error`, or `none` to suppress all logging.
+* Logging information
+  * 👀written | `stdout`👀
+  * `--log-level` OR `-l` /
+    * ALLOWED values
+      * `trace`
+      * `debug`
+      * `info`
+        * default one
+        * == display log lines / 's level == `info`, `warn` OR `error`
+      * `warn`
+      * `error`
+      * `none`
 
-By default, the `info` log level is used meaning that all log lines at level `info`, `warn` and `error` are shown while suppressing log lines at level `debug` or `trace`.
+### Rule configuration (".editorconfig")
 
-### Rule configuration (`.editorconfig`)
+* [".editorconfig"](../rules/configuration-ktlint.md)
+  * allows
+    * customizing SOME rules
+  * 👀ways to generate a scaffold of the ".editorconfig"👀
 
-Some rules can be tweaked via the [`editorconfig file`](../../rules/configuration-ktlint/).
-
-A scaffold of the `.editorconfig` file can be generated with command below. Note: that the generated file only contains configuration settings which are actively used by the [rules which are loaded](#rule-sets):
-
-```shell title="Generate .editorconfig"
-# Specify the code style (ktlint_official, intellij_idea or android_studio) to be used when generating the .editorconfig
-ktlint generateEditorConfig --code-style ktlint_official
-# or
-ktlint --ruleset=/path/to/custom-ruleset.jar generateEditorConfig --code-style android_studio
-```
-
-Normally the `.editorconfig` file is located in the root of your project directory. In case the file is located in a sub folder of the project, the settings of that file only applies to that subdirectory and its folders (recursively). Ktlint automatically detects and reads all `.editorconfig` files in your project.
-
-Use command below, to specify a default `editorconfig`. In case a property is not defined in any `.editorconfig` file on the path to the file, the value from the default file is used. The path may point to any valid file or directory. The path can be relative or absolute. Depending on your OS, the "~" at the beginning of a path is replaced by the user home directory.
-
-```shell title="Override '.editorconfig'"
-ktlint --editorconfig=/path/to/.editorconfig
-```
-
-!!! warning "Overrides '.editorconfig' in project directory" in KtLint 0.46 and older"
-    When specifying this option using ktlint 0.46 or older, all `.editorconfig` files in the project directory are being ignored. Starting from KtLint 0.47 the properties in this file are used as fallback.
+    ```shell title="Generate .editorconfig"
+    # Specify the code style (ktlint_official, intellij_idea or android_studio) to be used when generating the .editorconfig
+    ktlint generateEditorConfig --code-style ktlint_official
+    # or
+    ktlint --ruleset=/path/to/custom-ruleset.jar generateEditorConfig --code-style android_studio
+    ```
+  * located
+    * 👀NORMALLY, | your project directory's root 👀
+      * Reason: 🧠ONLY apply | location's sub folderS🧠
+      * ⚠️ALTHOUGH, Ktlint AUTOMATICALLY detects & reads ALL project's ".editorconfig" files⚠️  
+  * if you want to specify NON default ".editorconfig" -> 
+  
+    ```shell title="Override '.editorconfig'"
+    ktlint --editorconfig=pathRelativeOrAbsoluteToA.editorconfig
+    ```
+    * if a property is NOT defined | any ".editorconfig" -> use the value | default ".editorconfig"
 
 ### Stdin && stdout
 
-With command below, the input is read from `stdin` and the violations are printed to `stderr`. Logging is written to `stdout`.
+* `ktlint --stdin`
+  * the input is read -- from -- `stdin` /
+    * you can specify the path -- via -- `stdin-path` 
+    
+      ```shell title="file path from stdin-path"
+      ktlint --stdin --stdin-path /path/to/file/Foo.kt  # /path/to/file/Foo.kt NOT modified -- by -- stdin-path
+      ```
 
-```shell title="Lint from stdin"
-ktlint --stdin
-```
+  * the violations are printed | `stderr`
+  * logging is written | `stdout`
 
-When combined with the `--format` option, the formatted code is written to `stdout` and the violations are printed to `stderr`:
+* `ktlint --stdin -F`
+  * the violations are printed | `stderr`
+  * the formatted code is written | `stdout`
 
-```shell title="Format from stdin and write to stdout"
-ktlint --stdin -F
-```
-
-!!! tip "Suppress logging and error output"
-Logging output printed to `stdout` can be suppressed by setting `--log-level=none` (see [logging](#logging)).
-Output printed to `stderr` can be suppressed in different ways. To ignore all error output, add `2> /dev/null` to the end of the command line. Otherwise, specify a [reporter](#violation-reporting) to write the error output to a file.
-
-If input from `stdin` represents the contents of a file, the file path can be supplied with `stdin-path`. This path is made available for rules to use, the `--format` option will not modify this file. 
-
-```shell title="file path from stdin-path"
-ktlint --stdin --stdin-path /path/to/file/Foo.kt
-```
+* if you want to suppress 
+  * logging (== | `stdout`)
+    * by setting `--log-level=none` (see [logging](#logging)) 
+  * error output (== | `stderr`)
+    * ways
+      * ALL error output -> | CL's end, add `2> /dev/null`
+      * specify a [reporter](#violation-reporting) / write the error output | file
 
 ### Git hooks
 
