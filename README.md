@@ -12,6 +12,9 @@
 <p align="center">
 
 * == 👀Kotlin linter👀
+  * 's goal
+    * follow [Kotlin coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html) & [Android Kotlin Style Guide](https://android.github.io/kotlin-guides/style.html) /
+      * [MORE strict](https://github.com/pinterest/ktlint/issues/284#issuecomment-425177186)
   * inspired by
     * | JS,
       * [standard/standard](https://github.com/standard/standard)
@@ -24,14 +27,23 @@
 - Built-in 
   - Rule sets
   - formatter
+    - can fix AUTOMATICALLY lint violations
+      - OTHERS need to be fixed MANUALLY
   - reporters
     - `plain`
     - `json`
     - `html`
     - `checkstyle`
-- ".editorconfig" support
+- [how to create a custom reporter](documentation/snapshot/docs/api/custom-reporter.md)
+- [".editorconfig" support](documentation/snapshot/docs/rules/configuration-ktlint.md)
+  - contain
+    - ".editorconfig" properties
+    - IntelliJ IDEA specific properties
+    - Ktlint specific properties
 - executable jar
-- enable extension -- via -- custom rule sets + reporters
+  - == released -- as a -- 1! executable jar / include ALL dependencies
+- [disable rules](documentation/snapshot/docs/faq.md#how-do-i-enable-or-disable-a-rule)
+- enable extension -- via -- [custom rule sets](documentation/snapshot/docs/api/custom-rule-set.md) + reporters
 
 ## Quick start
 
