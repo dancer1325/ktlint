@@ -1,1 +1,1 @@
-* [here](/README.md)
+* [here](/README.md#key-features)
