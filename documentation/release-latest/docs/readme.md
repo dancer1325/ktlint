@@ -1,4 +1,6 @@
-# Build & test documentation on local machine
+* [index](../mkdocs.yml)'s nav
+
+# | locally, how to build & test documentation?
 
 The documentation of ktlint is served with [mkdocs-material](https://squidfunk.github.io/mkdocs-material/creating-your-site/#advanced-configuration). For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 

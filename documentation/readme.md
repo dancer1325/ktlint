@@ -1,11 +1,17 @@
 # Documentation
 
-Two versions of the documentation are kept in the 'master' branch:
+* | 'master' branch,
+  * ["snapshot" version](snapshot)
+    * ktlint's SNAPSHOT version
+    * 👀take notes of it👀
+    * see script [".announce"](/.announce)
+  * ["release-latest" version](release-latest)
+    * == ktlint's LAST officially published version 
+    * | publish the NEXT ktlint's official release,
+      * this version is replaced -- with the -- "snapshot" version
+    * see script [".announce"](/.announce)
 
-* The `snapshot` version of the documentation applies to the SNAPSHOT versions of ktlint. Upon the publication of the next official release of ktlint, the `release-latest` version of the documentation is replaced with the `snapshot` version. See script `.announce` which is executed by the Github workflow `publish-release-build`.
-* The `release-latest` version of the documentation applies to the last officially published version of ktlint. Upon the publication of the next official release of ktlint, this version of the documentation is replaced with the `snapshot` version. See script `.announce` which is executed by the Github workflow `publish-release-build`.
-
-Whenever a fix is to be made to the documentation, it should be determined in which version(s) of the documentation is to be fixed. Documentation fixes which only apply to the `SNAPSHOT` version of ktlint may only be fixed in the `snapshot` version of the documentation.
+* TODO: Whenever a fix is to be made to the documentation, it should be determined in which version(s) of the documentation is to be fixed. Documentation fixes which only apply to the `SNAPSHOT` version of ktlint may only be fixed in the `snapshot` version of the documentation.
 
 Documentation changes related to the latest released version, and which can not wait to be published with the documentation of the next release, need to be fixed in both the `snapshot` and `release-latest` versions. Only fixing it in `release-latest` results in the fix being lost upon publication of the next official ktlint version. Small typo's can be fixed in both, but it is also okay to only fix them in the `snapshot` only.
 
