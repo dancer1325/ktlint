@@ -1,10 +1,12 @@
 ## [Maven](https://github.com/shyiko/mvnw) integration
 
-By adding the plugin definition below to the `<plugins>` section in the `pom.xml`:
+* ways to execute
+  * `mvn compile`
+  * `mvn exec:exec@ktlint-format`
 
-* The `ktlint` task is bound to the *Maven compile* lifecycle and will be executed each time the `mvn compile` is executed. It can also be executed with command `mvn exec:exec@ktlint-format`.
+* TODO: [why to link to that Github repo?](https://github.com/pinterest/ktlint/discussions/3108)
 
-See [cli usage](../cli) for arguments that can be supplied to `ktlint`.
+* ALLOWED `configuration.arguments` -> `ktlint --help`
 
 ```xml title="Adding plugin to pom.xml"
 ...
@@ -19,7 +21,7 @@ See [cli usage](../cli) for arguments that can be supplied to `ktlint`.
       same commit as where the original code changes were made.
       -->
       <id>ktlint-format</id>
-      <phase>compile</phase>
+      <phase>compile</phase>        <!-- == executed | `mvn compile` -->
       <goals>
         <goal>exec</goal>
       </goals>
@@ -29,7 +31,7 @@ See [cli usage](../cli) for arguments that can be supplied to `ktlint`.
     <includePluginDependencies>true</includePluginDependencies>
     <executable>java</executable>
     <arguments>
-      <argument>-classpath</argument>
+      <argument>-classpath</argument>           <!-- TODO: check if it's valid -->
       <!-- automatically creates the classpath using all project dependencies, also adding the project build directory -->
       <classpath/>
       <argument>com.pinterest.ktlint.Main</argument>
@@ -53,8 +55,7 @@ See [cli usage](../cli) for arguments that can be supplied to `ktlint`.
 ...
 ```
 
-!!! Info "ktlint-maven-plugin"
-    You might be interested to use the dedicated [gantsign/ktlint-maven-plugin](https://github.com/gantsign/ktlint-maven-plugin).
+* ["ktlint-maven-plugin"](https://github.com/gantsign/ktlint-maven-plugin)
 
 ## [Gradle](https://gradle.org/) integration
 
