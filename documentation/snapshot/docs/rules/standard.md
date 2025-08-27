@@ -1,24 +1,26 @@
 ## Annotation formatting
 
-Multiple annotations should be on a separate line than the annotated declaration. Annotations with parameters should be on separate lines. Annotations should be followed by a space.
+* if you have MULTIPLE annotations -> annotation line != declaration line
+* annotations 
+  * \+ parameters should be | SEPARATE lines
+  * should be followed -- by a -- space
 
-=== "[:material-heart:](#) Ktlint"
-
+* ALLOWED
     ```kotlin
-    // A single annotation (without parameters) is allowed on same line as annotated construct
+    // 1! annotation (WITHOUT parameters) + annotated construct | SAME line
     @FunctionalInterface class FooBar {
         @JvmField var foo: String
     
         @Test fun bar() {}
     }
     
-    // A class or function parameter may have a single annotation with parameter(s) on the same line
+    // class OR function parameter 
     class Foo(
-        @Path("fooId") val fooId: String,
-        @NotNull("bar") bar: String,
+        @Path("fooId") val fooId: String,       // 1! annotation + parameter(s) | SAME line
+        @NotNull("bar") bar: String,            // 1! annotation + parameter(s) | SAME line
     )
     
-    // Multiple annotations (without parameters) are allowed on the same line
+    // MULTIPLE annotations (WITHOUT parameters) | SAME line
     @Foo @Bar
     class FooBar {
         @Foo @Bar
@@ -28,22 +30,22 @@ Multiple annotations should be on a separate line than the annotated declaration
         fun bar() {}
     }
     
-    // An array of annotations (without parameters) is allowed on same line as annotated construct
+    // array of annotations (WITHOUT parameters) + annotated construct | SAME line
     @[Foo Bar] class FooBar2 {
         @[Foo Bar] var foo: String
     
         @[Foo Bar] fun bar() {}
     }
     ```
-=== "[:material-heart-off-outline:](#) Disallowed"
-
+* ❌NOT ALLOWED❌
     ```kotlin
-    // An annotation with parameter(s) is not allowed on same line as annotated construct
+    // 1! annotation + parameter(s) + annotated construct | SAME line  
     @Suppress("Unused") class FooBar {
         @Suppress("Unused") var foo: String
         @Suppress("Unused") fun bar() {}
     }
-    // Multiple annotation on same line as annotated construct are not allowed
+    
+    // MULTIPLE annotation + annotated construct | SAME line
     @Foo @Bar class FooBar {
         @Foo @Bar var foo: String
         @Foo @Bar fun bar() {}
@@ -52,25 +54,22 @@ Multiple annotations should be on a separate line than the annotated declaration
 
 | Configuration setting                                                                                                                                                                                                                                                                         | ktlint_official | intellij_idea | android_studio |
 |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------:|:-------------:|:--------------:|
-| `ktlint_annotation_handle_annotations_with_parameters_same_as_annotations_without_parameters`<br/><i>Handle listed annotations identical to annotations without parameters. Value is a comma separated list of names without the `@` prefix. Use `*` for all annotations with parameters.</i> |     `unset`     |    `unset`    |    `unset`     |
+| `ktlint_annotation_handle_annotations_with_parameters_same_as_annotations_without_parameters`<br/> listed annotations handling == annotations WITHOUT parameters handling <br/> 's value == name1,name2,... / WITHOUT `@` prefix <br/> `*` == ALL annotations with parameters |     `unset`     |    `unset`    |    `unset`     |
 
-Rule id: `standard:annotation`
-
-Suppress or disable rule (1)
-{ .annotate }
-
-1. Suppress rule in code with annotation below:
-    ```kotlin
-    @Suppress("ktlint:standard:annotation")
-    ```
-   Enable rule via `.editorconfig`
+* Rule id: `standard:annotation`
+  * if you want to enable
     ```editorconfig
     ktlint_standard_annotation = enabled
     ```
-   Disable rule via `.editorconfig`
-    ```editorconfig
-    ktlint_standard_annotation = disabled
-    ```
+  * if you want to 
+    * suppress
+      ```kotlin
+      @Suppress("ktlint:standard:annotation")
+      ```
+    * disable
+      ```editorconfig
+      ktlint_standard_annotation = disabled
+      ```
 
 ## Binary expression wrapping
 
@@ -867,13 +866,12 @@ Suppress or disable rule (1)
 
 ## Function signature
 
-Rewrites the function signature to a single line when possible (e.g. when not exceeding the `max_line_length` property) or a multiline signature otherwise.
+* 👀if possible (_Example:_ NOT exceed the `max_line_length` property) -> function signature is rewritten -- to -- 1! line👀
+  * else -> multiline signature
 
-!!! note
-    Wrapping of parameters is also influenced by the `parameter-list-wrapping` rule.
+* wrapping of parameters is ALSO influenced -- by the -- `parameter-list-wrapping` rule
 
-=== "[:material-heart:](#) Ktlint"
-
+* ALLOWED
     ```kotlin
     // Assume that the last allowed character is
     // at the X character on the right           X
@@ -884,19 +882,19 @@ Rewrites the function signature to a single line when possible (e.g. when not ex
     ): String {
         // body
     }
-
+    
     // Assume that the last allowed character is
     // at the X character on the right           X
     fun bar(a: Any, b: Any, c: Any): String {
         // body
     }
-
+    
     // When wrapping of body is set to 'default'.
     // Assume that the last allowed character is
     // at the X character on the right           X
     fun f(a: Any, b: Any): String = "some-result"
         .uppercase()
-
+    
     // When wrapping of body is set to 'multiline'
     // or 'always'.
     // Assume that the last allowed character is
@@ -905,7 +903,7 @@ Rewrites the function signature to a single line when possible (e.g. when not ex
         "some-result"
             .uppercase()
     ```
-=== "[:material-heart-off-outline:](#) Disallowed"
+* ❌NOT ALLOWED❌
 
     ```kotlin
     // Assume that the last allowed character is
@@ -941,12 +939,12 @@ Rewrites the function signature to a single line when possible (e.g. when not ex
 
 | Configuration setting                                                                                                                                                                                                                                                                                                                                                                                                                   | ktlint_official | intellij_idea | android_studio |
 |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------:|:-------------:|:--------------:|
-| `ktlint_function_signature_body_expression_wrapping`<br/><i>Determines how to wrap the body of function in case it is an expression. Use `default` to wrap the body expression only when the first line of the expression does not fit on the same line as the function signature. Use `multiline` to force wrapping of body expressions that consists of multiple lines. Use `always` to force wrapping of body expression always.</i> |   `multiline`   |   `default`   |   `default`    |
-| `ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than`<br/><i>Forces a multiline function signature in case the function contains the specified minimum number of parameters even in case the function signature would fit on a single line. Use value `unset` (default) to disable this setting.</i>                                                                                              |        2        |    `unset`    |    `unset`     |
+| `ktlint_function_signature_body_expression_wrapping`<br/> how to wrap the function expression's body <br/> `default` == if expression's first line != function signature's line -> wrap the body expression <br/> `multiline` == wrap body expressions / have MULTIPLE lines <br/> `always` == ALWAYS wrap body expression |   `multiline`   |   `default`   |   `default`    |
+| `ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than` <br/> &nbsp;&nbsp; if the function's parameters > minimum number of parameters -> forces a MULTILINE function signature <br/> `unset` <br/> &nbsp;&nbsp; default value <br/> &nbsp;&nbsp; disable this setting                                                                                              |        2        |    `unset`    |    `unset`     |
 
-=== "[:material-heart:](#) default"
+### `ktlint_function_signature_body_expression_wrapping = default`
 
-    When `ktlint_function_signature_body_expression_wrapping` is set to `default`, the first line of a body expression is appended to the function signature as long as the max line length is not exceeded.
+* body expression's FIRST line + function signature <= MAX line length -> 👀appended | FIRST line 👀
 
     ```kotlin title="ktlint_function_signature_body_expression_wrapping=default"
     // Given that the function signature has to be written as a single line
@@ -963,43 +961,44 @@ Rewrites the function signature to a single line when possible (e.g. when not ex
         .uppercase()
     ```
 
-=== "[:material-heart:](#) multiline"
+### `ktlint_function_signature_body_expression_wrapping = multiline`
 
-    When `ktlint_function_signature_body_expression_wrapping` is set to `multiline`, the body expression starts on a separate line in case it is a multiline expression. A single line body expression is wrapped only when it does not fit on the same line as the function signature.
+* if MULTILINE expression -> body expression starts | SEPARATE line 
+* ONLY if 1! line body expression does NOT fit | line == function signature -> 1! line body expression is wrapped 
     
-    ```kotlin title="ktlint_function_signature_body_expression_wrapping=multiline"
-    // Given that the function signature has to be written as a single line
-    // function signature and that the function has a single line body expression
-    // that fits on the same line as the function signature.
-    fun someFunction(a: Any, b: Any): String = "some-result".uppercase()
-    
-    // Given that the function signature has to be written as a multiline
-    // function signature and that the function has a single line body expression
-    // that fits on the same line as the function signature.
-    fun someFunction(
-        a: Any,
-        b: Any
-    ): String = "some-result".uppercase()
-    
-    // Given that the function signature has to be written as a single line
-    // function signature and that the function has a multiline body expression
-    fun someFunction(a: Any, b: Any): String =
-        "some-result"
-             .uppercase()
+```kotlin title="ktlint_function_signature_body_expression_wrapping=multiline"
+// Given that the function signature has to be written as a single line
+// function signature and that the function has a single line body expression
+// that fits on the same line as the function signature.
+fun someFunction(a: Any, b: Any): String = "some-result".uppercase()
 
-    // Given that the function signature has to be written as a multiline
-    // function signature and that the function has a multiline body expression
-    fun someFunction(
-        a: Any,
-        b: Any
-    ): String =
-        "some-result"
-           .uppercase()
-    ```
+// Given that the function signature has to be written as a multiline
+// function signature and that the function has a single line body expression
+// that fits on the same line as the function signature.
+fun someFunction(
+    a: Any,
+    b: Any
+): String = "some-result".uppercase()
 
-=== "[:material-heart:](#) always"
+// Given that the function signature has to be written as a single line
+// function signature and that the function has a multiline body expression
+fun someFunction(a: Any, b: Any): String =
+    "some-result"
+         .uppercase()
 
-    When `ktlint_function_signature_body_expression_wrapping` is  set to `always` the body expression is always wrapped to a separate line.
+// Given that the function signature has to be written as a multiline
+// function signature and that the function has a multiline body expression
+fun someFunction(
+    a: Any,
+    b: Any
+): String =
+    "some-result"
+       .uppercase()
+```
+
+### `ktlint_function_signature_body_expression_wrapping = always`
+
+* body expression is ALWAYS wrapped | SEPARATE line
     
     ```kotlin title="ktlint_function_signature_body_expression_wrapping=always"
     // Given that the function signature has to be written as a single line
@@ -1131,9 +1130,10 @@ Suppress or disable rule (1)
 
 ## Import ordering
 
-Ensures that imports are ordered consistently.
+* 's goal
+  * imports are ordered CONSISTENTLY
 
-=== "[:material-heart:](#) Ktlint"
+* ALLOWED
 
     ```kotlin
     import com.bar.Bar
@@ -1141,7 +1141,8 @@ Ensures that imports are ordered consistently.
     import org.foo.bar.FooBar
     import java.util.concurrent.ConcurrentHashMap
     ```
-=== "[:material-heart-off-outline:](#) Disallowed"
+
+* ❌NOT ALLOWED❌
 
     ```kotlin
     import com.bar.Bar
@@ -1149,46 +1150,67 @@ Ensures that imports are ordered consistently.
     import org.foo.bar.FooBar
     import com.foo.Foo
     ```
+
+### `ij_kotlin_imports_layout`
 
 | Configuration setting                                                                                                |          ktlint_official           |            intellij_idea            | android_studio |
 |:---------------------------------------------------------------------------------------------------------------------|:----------------------------------:|:-----------------------------------:|:--------------:|
-| `ij_kotlin_imports_layout`</br><i>Defines imports order layout for Kotlin files</i>. For more details see below table. | *,java.**,javax.**,kotlin.**,^ <1> | *,java.**,javax.**,kotlin.**,^ <1>  |     * <2>      |
+| `ij_kotlin_imports_layout`</br> &nbsp;&nbsp; \| Kotlin files, imports order layout | *,java.**,javax.**,kotlin.**,^  | *,java.**,javax.**,kotlin.**,^   |     *       |
 
-### ij_kotlin_packages_to_use_import_on_demand
+### `ij_kotlin_packages_to_use_import_on_demand`
 
-This property holds 0 or more import paths. The import path can be a full path, e.g. "java.util.List.*" as well as wildcard path, e.g. "kotlin.**".
+* 's property 
+  * holds >= 0 import paths
+  * 's import path
+    * ALLOWED
+      * full path 
+        * _Example:_ "java.util.List.*"
+      * wildcard path
+        * _Example:_ "kotlin.**"
 
-Imports can be grouped by composing the layout with symbols below:
+* imports
+  * can be grouped -- by -- composing the layout + symbols
+    * ALLOWED symbols
+      *  `*` OR `something.*`
+        * overrides the NO-wildcard-imports rule
+        * uses
+          * imports -- from -- libraries
+        * `**`
+          * == match package + ALL subpackages
+      * `|`
+        * == blank line
+        * ALLOWED
+          * BETWEEN imports
+        * NOT ALLOWED | 
+          * beginning of the layout OR
+          * end of the layout 
+      * `^`
+        * == alias import
+          * _Examples:_
+            * _Example1:_ "^android.*" match ALL android alias imports
+            * _Example2:_ "^" will match ALL OTHER alias imports
+  * | SAME group,
+    * are sorted alphabetically / ⚠️capital letters BEFORE lower case letters (== "Z" before "a")⚠️
+      * _Examples:_
+        ```.editorconfig
+        ij_kotlin_imports_layout=*                                                              # alphabetical / capital letters BEFORE lower case letters (e.g. Z before a), NO blank lines
+        ij_kotlin_imports_layout=*,java.**,javax.**,kotlin.**,^            # == default IntelliJ IDEA style == alphabetical / 👀"java", "javax", "kotlin" & alias imports | end of the imports list👀
+        ij_kotlin_imports_layout=android.**,|,^org.junit.**,kotlin.io.Closeable.*,|,*,^         # custom imports layout
+        ```
 
-*  `*` - wildcard. There must be at least one entry of a single wildcard to match all other imports. Matches anything after a specified symbol/import as well.
-* `|` - blank line. Supports only single blank lines between imports. No blank line is allowed in the beginning or end of the layout.
-* `^` - alias import, e.g. "^android.*" will match all android alias imports, "^" will match all other alias imports.
+### `standard:import-ordering`
 
-Imports in the same group are sorted alphabetical with capital letters before lower case letters (e.g. Z before a).
-
-Examples:
-```kotlin
-ij_kotlin_imports_layout=* # alphabetical with capital letters before lower case letters (e.g. Z before a), no blank lines
-ij_kotlin_imports_layout=*,java.**,javax.**,kotlin.**,^ # default IntelliJ IDEA style, same as alphabetical, but with "java", "javax", "kotlin" and alias imports in the end of the imports list
-ij_kotlin_imports_layout=android.**,|,^org.junit.**,kotlin.io.Closeable.*,|,*,^ # custom imports layout
-```
-
-Wildcard imports can be allowed for specific import paths (Comma-separated list, use "**" as wildcard for package and all subpackages). This setting overrides the no-wildcard-imports rule. This setting is best be used for allowing wildcard imports from libraries like Ktor where extension functions are used in a way that creates a lot of imports.
-
-Rule id: `standard:import-ordering`
-
-Suppress or disable rule (1)
-{ .annotate }
-
-1. Suppress rule in code with annotation below:
+* == rule id
+* if you want to
+  * suppress the rule
     ```kotlin
     @Suppress("ktlint:standard:import-ordering")
     ```
-   Enable rule via `.editorconfig`
+  * enable the rule
     ```editorconfig
     ktlint_standard_import-ordering = enabled
     ```
-   Disable rule via `.editorconfig`
+  * disable rule
     ```editorconfig
     ktlint_standard_import-ordering = disabled
     ```
@@ -1939,13 +1961,30 @@ Rule id: `standard:ktlint-suppression`
 !!! note
     This rule cannot be suppressed via `@Suppress` or be disabled in the `.editorconfig`.
 
-## Max line length
+## `max_line_length`
 
-Ensures that lines do not exceed the maximum length of a line as specified in `.editorconfig` property `max_line_length`.
+* lines' length <= `max_line_length`
 
-This rule does not apply in a number of situations. The `.editorconfig` property `ktlint_ignore_back_ticked_identifier` can be set to ignore identifiers which are enclosed in backticks, which for example is very useful when you want to allow longer names for unit tests.
+* `ktlint_ignore_back_ticked_identifier`
+  * uses
+    * | unit tests, to allow longer names 
 
-=== "[:material-heart:](#) Ktlint"
+* `standard:max-line-length`
+  * if you want to 
+    * suppress
+      ```kotlin
+      @Suppress("ktlint:standard:max-line-length")
+      ```
+    * enable
+      ```editorconfig
+      ktlint_standard_max-line-length = enabled
+      ```
+    * disable
+      ```editorconfig
+      ktlint_standard_max-line-length = disabled
+      ```
+
+* ALLOWED
 
     ```kotlin
     // Assume that the last allowed character is
@@ -1967,7 +2006,7 @@ This rule does not apply in a number of situations. The `.editorconfig` property
     fun `Test description which is toooooooooooo long`() {
     }
     ```
-=== "[:material-heart-off-outline:](#) Disallowed"
+* ❌NOT ALLOWED❌
 
     ```kotlin
     // Assume that the last allowed character is
@@ -1980,26 +2019,8 @@ This rule does not apply in a number of situations. The `.editorconfig` property
 
 | Configuration setting                                                                                                                                                                                                         | ktlint_official | intellij_idea | android_studio |
 |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------:|:-------------:|:--------------:|
-| `ktlint_ignore_back_ticked_identifier`<br/><i>Defines whether the backticked identifier (``) should be ignored.</i>                                                                                                           |     `false`     |    `false`    |    `false`     |
-| `max_line_length`<br/><i>Maximum length of a (regular) line. This property is ignored in case the `max-line-length` rule is disabled, or when using Ktlint via a third party integration that does not provide this rule.</i> |       140       |     `off`     |     `100`      |
-
-Rule id: `standard:max-line-length`
-
-Suppress or disable rule (1)
-{ .annotate }
-
-1. Suppress rule in code with annotation below:
-    ```kotlin
-    @Suppress("ktlint:standard:max-line-length")
-    ```
-   Enable rule via `.editorconfig`
-    ```editorconfig
-    ktlint_standard_max-line-length = enabled
-    ```
-   Disable rule via `.editorconfig`
-    ```editorconfig
-    ktlint_standard_max-line-length = disabled
-    ```
+| `ktlint_ignore_back_ticked_identifier`<br/> &nbsp;&nbsp; ignore the backticked (``) |     `false`     |    `false`    |    `false`     |
+| `max_line_length`<br/> &nbsp;&nbsp; == (regular) line's MAXIMUM length <br/> &nbsp;&nbsp; if `max-line-length` == disabled OR using Ktlint via a TP integration / NOT provide this rule -> ignored  |       140       |     `off`     |     `100`      |
 
 ## Modifier order
 
