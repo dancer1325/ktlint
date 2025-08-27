@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.install.examples.integrations</groupId>
+  <artifactId>exec-maven-plugin</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>exec-maven-plugin</name>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <kotlin.version>1.9.20</kotlin.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib</artifactId>
+      <version>${kotlin.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>src/main/kotlin</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-plugin</artifactId>
+        <version>${kotlin.version}</version>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- plugin for ktlint -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.0</version>
+        <executions>
+          <execution>
+            <!--
+            Format and autocorrect lint errors when possible during compile. This helps in committing autocorrect changes in the
+            same commit as where the original code changes were made.
+            -->
+            <id>ktlint-format</id>
+            <phase>compile</phase>        <!-- == executed | `mvn compile` -->
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includePluginDependencies>true</includePluginDependencies>
+          <executable>java</executable>
+          <arguments>
+            <argument>-classpath</argument>           <!-- TODO: check if it's valid -->
+            <!-- automatically creates the classpath using all project dependencies, also adding the project build directory -->
+            <classpath/>
+            <argument>com.pinterest.ktlint.Main</argument>
+            <!-- Actual wanted arguments to run ktlint with formatting -->
+            <argument>--format</argument>
+            <argument>--relative</argument>
+          </arguments>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.pinterest.ktlint</groupId>
+            <artifactId>ktlint-cli</artifactId>
+            <version>1.7.1</version>
+            <!-- Use fat jar of ktlint-cli -->
+            <classifier>all</classifier>
+            <type>jar</type>
+          </dependency>
+          <!-- additional 3rd party ruleset(s) can be specified here -->
+        </dependencies>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>
